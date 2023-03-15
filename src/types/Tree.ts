@@ -1,5 +1,6 @@
 // React component tree is a nested data structure, children are Trees
 
+export type Props = Record<string, true | string>
 export type Tree = {
   id: string;
   name: string;
@@ -14,6 +15,6 @@ export type Tree = {
   reduxConnect: boolean;
   children: Tree[];
   parentList: string[];
-  props: { [key: string]: boolean; };
+  props: Props;
   error: string;
 };
