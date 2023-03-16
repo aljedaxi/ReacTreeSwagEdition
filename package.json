@@ -5,7 +5,6 @@
   "version": "0.0.5",
   "icon": "icon.png",
   "preview": false,
-  "type": "module",
   "files": [
     "out"
   ],
@@ -26,9 +25,9 @@
   "main": "./out/index.js",
   "scripts": {
     "gen-types": "tsc src/parser.ts --declaration --emitDeclarationOnly && cp src/parser.d.ts out/index.d.ts",
-    "build": "rm -rdf out && mkdir out && npx esbuild src/parser.ts --bundle --minify --platform=node --format=esm > out/index.js",
+    "build": "rm -rdf out && mkdir out && npx esbuild src/parser.ts --bundle --minify --platform=node > out/index.js",
     "prepare": "npm run build",
-    "test": "npx jest src/test/suite/parser.test.ts"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest src/test/suite/parser.test.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
