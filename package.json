@@ -5,7 +5,10 @@
   "version": "0.0.1",
   "icon": "icon.png",
   "preview": false,
-	"type": "module",
+  "type": "module",
+  "files": [
+    "out"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/aljedaxi/filtereact/tree/main"
@@ -22,9 +25,9 @@
   "license": "MIT",
   "main": "./out/index.js",
   "scripts": {
-		"gen-types": "tsc src/parser.ts --declaration --emitDeclarationOnly && cp src/parser.d.ts out/index.d.ts",
-		"build": "npx esbuild src/parser.ts --bundle --platform=node --format=esm > out/index.js",
-		"prepare": "npm run build",
+    "gen-types": "tsc src/parser.ts --declaration --emitDeclarationOnly && cp src/parser.d.ts out/index.d.ts",
+    "build": "npx esbuild src/parser.ts --bundle --platform=node --format=esm > out/index.js",
+    "prepare": "npm run build",
     "test": "npx jest src/test/suite/parser.test.ts"
   },
   "devDependencies": {
