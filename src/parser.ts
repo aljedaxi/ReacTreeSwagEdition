@@ -370,6 +370,8 @@ export class Parser {
     astTokens: { [key: string]: any }[],
     j: number
   ): Props {
+		const sequentialTypeLabels = (labels: string[], typeds: {type: {label: string}}[]) =>
+			labels.every((l, i) => l === typeds[i].type.label)
     const props: Props = {};
     while (astTokens[j].type.label !== 'jsxTagEnd') {
 			const [mPropName, mEquals, mOpCurly, mValue, mCloseCurly] = astTokens.slice(j, j + 5)
@@ -377,9 +379,18 @@ export class Parser {
         mPropName.type.label === 'jsxName' &&
         mEquals.value === '='
       ) {
-				const isCurlyForm = mOpCurly.type.label === '{' && mValue.type.label === 'string' && mCloseCurly.type.label === '}'
-				const v = isCurlyForm                ? mValue.value
-					: mOpCurly.type.label === 'string' ? mOpCurly.value
+				const isCurlyForm = sequentialTypeLabels(
+					['{', 'string', '}'], astTokens.slice(j + 2, j + 5)
+				)
+				const isTemplateForm = sequentialTypeLabels(
+					['{', '`', 'template', '`', '}'], astTokens.slice(j + 2, j + 7)
+				)
+				const isUncurliedStringForm = sequentialTypeLabels(
+					['string'], astTokens.slice(j + 2, j + 3)
+				)
+				const v = isCurlyForm                ? astTokens[j + 3].value
+					: isTemplateForm                   ? astTokens[j + 4].value
+					: mOpCurly.type.label === 'string' ? astTokens[j + 2].value
 					:                                    true
 				const k = mPropName.value
         props[k] = v;
