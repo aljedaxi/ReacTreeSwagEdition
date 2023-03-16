@@ -10,4 +10,8 @@ gen-readme:
 		| sed 's/\(.*\)/https:\/\/img.shields.io\/badge\/npm-v\1-blue/' \
 		| sed 's/\(.*\)/![version](\1)/' \
 		>> README.md
+	echo 'passing' \
+		| sed 's/\(.*\)/https:\/\/img.shields.io\/badge\/build-\1-success/' \
+		| sed 's/\(.*\)/![version](\1)/' \
+		>> README.md
 	grep -v '^# ' README.tmpl.md >> README.md
