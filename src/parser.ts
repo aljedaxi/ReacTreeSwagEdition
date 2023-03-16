@@ -2,7 +2,7 @@ import * as babelParser from '@babel/parser';
 import * as path from 'path';
 import * as fs from 'fs';
 import { getNonce } from './getNonce';
-import { Tree } from './types/Tree';
+import { Tree, Props } from './types/Tree';
 import { ImportObj } from './types/ImportObj';
 import { File } from '@babel/types';
 
@@ -227,7 +227,6 @@ export class Parser {
     const bodyImports = body.filter(
       (item) => item.type === 'ImportDeclaration' || 'VariableDeclaration'
     );
-    // console.log('bodyImports are: ', bodyImports);
     return bodyImports.reduce((accum, curr) => {
       // Import Declarations:
       if (curr.type === 'ImportDeclaration') {
@@ -285,7 +284,7 @@ export class Parser {
     parentNode: Tree
   ): Tree[] {
     let childNodes: { [key: string]: Tree } = {};
-    let props: { [key: string]: boolean } = {};
+    let props: Props = {};
     let token: { [key: string]: any };
 
     for (let i = 0; i < astTokens.length; i++) {
@@ -329,7 +328,7 @@ export class Parser {
   private getChildNodes(
     imports: ImportObj,
     astToken: { [key: string]: any },
-    props: { [key: string]: boolean },
+    props: Props,
     parent: Tree,
     children: { [key: string]: Tree }
   ): { [key: string]: Tree } {
@@ -370,14 +369,19 @@ export class Parser {
   private getJSXProps(
     astTokens: { [key: string]: any }[],
     j: number
-  ): { [key: string]: boolean } {
-    const props: any = {};
+  ): Props {
+    const props: Props = {};
     while (astTokens[j].type.label !== 'jsxTagEnd') {
+			const [mPropName, mEquals, mOpCurly, mValue, mCloseCurly] = astTokens.slice(j, j + 5)
       if (
-        astTokens[j].type.label === 'jsxName' &&
-        astTokens[j + 1].value === '='
+        mPropName.type.label === 'jsxName' &&
+        mEquals.value === '='
       ) {
-        props[astTokens[j].value] = true;
+				const v = mOpCurly.type.label === '{' && mValue.type.label === 'string' && mCloseCurly.type.label === '}'
+					? mValue.value
+					: true
+				const k = mPropName.value
+        props[k] = v;
       }
       j += 1;
     }

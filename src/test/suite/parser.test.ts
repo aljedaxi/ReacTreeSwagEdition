@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { Parser } from '../../parser';
-import { describe, suite , test, before} from 'mocha';
+import { describe, suite , test, beforeAll, expect as jestExpect} from '@jest/globals';
 import { expect } from 'chai';
 import * as path from 'path';
 
@@ -9,12 +9,12 @@ import * as path from 'path';
 // import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
 
-suite('Parser Test Suite', () => {
+describe('Parser Test Suite', () => {
 	let parser, tree, file;
 
 	// UNPARSED TREE TEST
 	describe('It initializes correctly', () => {
-		before( () => {
+		beforeAll( () => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_0/index.js');
 			parser = new Parser(file);
 		});
@@ -31,7 +31,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 0: ONE CHILD
 	describe('It works for simple apps', () => {
-		before( () => {
+		beforeAll( () => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_0/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -50,7 +50,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 1: NESTED CHILDREN
 	describe('It works for 2 components', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_1/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -77,7 +77,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 2: THIRD PARTY, REACT ROUTER, DESTRUCTURED IMPORTS
 	describe('It works for third party / React Router components and destructured imports', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_2/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -107,7 +107,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 3: IDENTIFIES REDUX STORE CONNECTION
 	describe('It identifies a Redux store connection and designates the component as such', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_3/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -124,7 +124,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 4: ALIASED IMPORTS
 	describe('It works for aliases', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_4/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -143,7 +143,7 @@ suite('Parser Test Suite', () => {
 	// TEST 5: MISSING EXTENSIONS AND UNUSED IMPORTS
 	describe('It works for extension-less imports', () => {
 		let names, paths, expectedNames, expectedPaths;
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_5/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -178,7 +178,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 6: BAD IMPORT OF APP2 FROM APP1 COMPONENT
 	describe('It works for badly imported children nodes', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_6/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -192,7 +192,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 7: SYNTAX ERROR IN APP FILE CAUSES PARSER ERROR
 	describe('It should log an error when the parser encounters a javascript syntax error', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_7/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -207,7 +207,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 8: MULTIPLE PROPS ON ONE COMPONENT
 	describe('It should properly count repeat components and consolidate and grab their props', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_8/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -218,15 +218,15 @@ suite('Parser Test Suite', () => {
 		});
 
 		test('Grandchild should have the correct three props', () => {
-			expect(tree.children[0].children[0].props).has.own.property('prop1').that.is.true;
-			expect(tree.children[0].children[0].props).has.own.property('prop2').that.is.true;
-			expect(tree.children[0].children[0].props).has.own.property('prop3').that.is.true;
+			jestExpect(tree.children[0].children[0].props.prop1).toBe('This is a prop');
+			jestExpect(tree.children[0].children[0].props.prop2).toBe('This is another prop');
+			jestExpect(tree.children[0].children[0].props.prop3).toBe('One more prop');
 		});
 	});
 
 	// TEST 9: FINDING DIFFERENT PROPS ACROSS TWO OR MORE IDENTICAL COMPONENTS
 	describe('It should properly count repeat components and consolidate and grab their props', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_9/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -237,14 +237,14 @@ suite('Parser Test Suite', () => {
 		});
 
 		test('Grandchild should have the correct two props', () => {
-			expect(tree.children[0].children[0].props).has.own.property('prop1').that.is.true;
-			expect(tree.children[0].children[0].props).has.own.property('prop2').that.is.true;
+			jestExpect(tree.children[0].children[0].props.prop1).toBe('This is a prop');
+			jestExpect(tree.children[0].children[0].props.prop2).toBe('This is a second, different prop');
 		});
 	});
 
 	// TEST 10: CHECK CHILDREN WORKS AND COMPONENTS WORK
 	describe('It should render children when children are rendered as values of prop called component', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_10/index.jsx');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -261,7 +261,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 11: PARSER DOESN'T BREAK UPON RECURSIVE COMPONENTS
 	describe('It should render the second call of mutually recursive components, but no further', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_11/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -285,7 +285,7 @@ suite('Parser Test Suite', () => {
 
 	// TEST 12: NEXT.JS APPS
 	describe('It should parse Next.js applications', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_12/pages/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
@@ -306,7 +306,7 @@ suite('Parser Test Suite', () => {
 
   // TEST 13: Variable Declaration Imports and React.lazy Imports
   describe('It should parse VariableDeclaration imports including React.lazy imports', () => {
-		before(() => {
+		beforeAll(() => {
 			file = path.join(__dirname, '../../../src/test/test_apps/test_13/index.js');
 			parser = new Parser(file);
 			tree = parser.parse();
