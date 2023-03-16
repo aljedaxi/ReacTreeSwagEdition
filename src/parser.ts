@@ -227,7 +227,6 @@ export class Parser {
     const bodyImports = body.filter(
       (item) => item.type === 'ImportDeclaration' || 'VariableDeclaration'
     );
-    // console.log('bodyImports are: ', bodyImports);
     return bodyImports.reduce((accum, curr) => {
       // Import Declarations:
       if (curr.type === 'ImportDeclaration') {
@@ -378,7 +377,6 @@ export class Parser {
         mPropName.type.label === 'jsxName' &&
         mEquals.value === '='
       ) {
-				console.log([mOpCurly, mValue, mCloseCurly].map(t => t.type.label))
 				const v = mOpCurly.type.label === '{' && mValue.type.label === 'string' && mCloseCurly.type.label === '}'
 					? mValue.value
 					: true
