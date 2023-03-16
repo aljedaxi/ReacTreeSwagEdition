@@ -1,17 +1,14 @@
 {
-  "name": "reactree",
-  "displayName": "ReacTree",
-  "description": "React hierarchy tree visualizer and navigation tool",
-  "version": "1.0.7",
+  "name": "filtereact",
+  "displayName": "FilteReact",
+  "description": "React hierarchy tree on the command line",
+  "version": "0.0.1",
   "icon": "icon.png",
-  "publisher": "ReacTreeDev",
   "preview": false,
-  "engines": {
-    "vscode": "^1.74.3"
-  },
+	"type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oslabs-beta/ReacTree/tree/main"
+    "url": "https://github.com/aljedaxi/filtereact/tree/main"
   },
   "categories": [
     "Other"
@@ -20,35 +17,14 @@
     "react",
     "hierarchy tree",
     "react components",
-    "parent-child",
-    "navigation",
-    "visualizer"
+    "parent-child"
   ],
   "license": "MIT",
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "reacTree.start",
-        "title": "ReacTree: Show Panel"
-      },
-      {
-        "command": "reacTree.startStatusBar",
-        "title": "ReacTree: Show StatusBar"
-      }
-    ]
-  },
-  "extensionPack": [
-    "docsmsft.docs-markdown",
-    "docsmsft.docs-preview"
-  ],
+  "main": "./out/index.js",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "webpack --mode production --config webpack.config.ts",
-    "watch": "webpack --mode development --config webpack.config.ts --watch",
+		"gen-types": "tsc src/parser.ts --declaration --emitDeclarationOnly && cp src/parser.d.ts out/index.d.ts",
+		"build": "npx esbuild src/parser.ts --bundle --platform=node --format=esm > out/index.js",
+		"prepare": "npm run build",
     "test": "npx jest src/test/suite/parser.test.ts"
   },
   "devDependencies": {
@@ -72,6 +48,7 @@
     "babel-loader": "^8.0.6",
     "chai": "^4.3.7",
     "copy-webpack-plugin": "^5.1.1",
+    "esbuild": "^0.17.11",
     "glob": "^8.1.0",
     "jest": "^29.5.0",
     "mocha": "^10.2.0",
