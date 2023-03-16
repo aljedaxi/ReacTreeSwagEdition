@@ -377,9 +377,10 @@ export class Parser {
         mPropName.type.label === 'jsxName' &&
         mEquals.value === '='
       ) {
-				const v = mOpCurly.type.label === '{' && mValue.type.label === 'string' && mCloseCurly.type.label === '}'
-					? mValue.value
-					: true
+				const isCurlyForm = mOpCurly.type.label === '{' && mValue.type.label === 'string' && mCloseCurly.type.label === '}'
+				const v = isCurlyForm                ? mValue.value
+					: mOpCurly.type.label === 'string' ? mOpCurly.value
+					:                                    true
 				const k = mPropName.value
         props[k] = v;
       }
