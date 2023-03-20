@@ -15,3 +15,7 @@ gen-readme:
 		| sed 's/\(.*\)/![version](\1)/' \
 		>> README.md
 	grep -v '^# ' README.tmpl.md >> README.md
+
+test-cli:
+	echo src/test/test_apps/test_8/index.js | out/cli.js
+	out/cli.js src/test/test_apps/test_8/index.js 

@@ -2,4 +2,4 @@
 /.vscode-test/
 /*.vsix
 /.DS_Store
-out/
+out/index.js
