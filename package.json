@@ -2,7 +2,7 @@
   "name": "filtereact",
   "displayName": "FilteReact",
   "description": "React hierarchy tree on the command line",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "icon": "icon.png",
   "preview": false,
   "files": [
@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "main": "./out/index.js",
-	"bin": "./out/cli.js",
+  "bin": "./out/cli.js",
   "scripts": {
     "gen-types": "tsc src/parser.ts --declaration --emitDeclarationOnly && cp src/parser.d.ts out/index.d.ts",
     "build": "rm -rdf out && mkdir out && npx esbuild src/parser.ts --bundle --minify --platform=node > out/index.js",
