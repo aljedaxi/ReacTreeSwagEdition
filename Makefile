@@ -12,10 +12,10 @@ gen-readme:
 		>> README.md
 	echo 'passing' \
 		| sed 's/\(.*\)/https:\/\/img.shields.io\/badge\/build-\1-success/' \
-		| sed 's/\(.*\)/![version](\1)/' \
+		| sed 's/\(.*\)/![tests passing](\1)/' \
 		>> README.md
 	grep -v '^# ' README.tmpl.md >> README.md
 
 test-cli:
-	echo src/test/test_apps/test_8/index.js | out/cli.js
-	out/cli.js src/test/test_apps/test_8/index.js 
+	echo src/test/test_apps/test_8/index.js | out/cli.js | out/cli.js -i
+	out/cli.js src/test/test_apps/test_8/index.js | out/cli.js -i

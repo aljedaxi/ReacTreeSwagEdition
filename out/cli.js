@@ -23,7 +23,13 @@ const options = {
 			type: 'boolean',
 			short: 'h',
 			description: 'show this helpful help',
-		}
+		},
+		inverse: {
+			type: 'boolean',
+			short: 'i',
+			description: 'turn json into jsx',
+			default: false,
+		},
 	}
 }
 
@@ -65,9 +71,31 @@ const parseFile = filePath => {
 		console.log(JSON.stringify(component))
 	}
 }
+
+const jsxVal = v => 
+	typeof v === 'string' ? `='${v.replace(/'/g, "\\'")}'`
+	:      v === true     ? ''
+  :                       `={${JSON.stringify(v)}}`
+
+const inverseMain = jsonString => {
+	const json = JSON.parse(jsonString)
+	const {id, name, props, ...rest} = json
+	console.log(
+		`<${name} ${
+			Object.entries(props)
+				.map(([k, v]) => `${k}${jsxVal(v)}`)
+				.join(' ')
+		}/>`
+	)
+}
+
 if (positionals.length > 0) {
+	if (values.inverse) {
+		console.error("can't be inverse and have positional arguments")
+		process.exit(-1)
+	}
 	positionals.forEach(parseFile)
 } else {
 	const readInterface = readline.createInterface({input: stdin, output: stdout})
-	readInterface.on('line', parseFile)
+	readInterface.on('line', values.inverse ? inverseMain : parseFile)
 }
