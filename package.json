@@ -26,7 +26,7 @@
   "bin": "./out/cli.js",
   "scripts": {
     "gen-types": "tsc src/parser.ts --declaration --emitDeclarationOnly && cp src/parser.d.ts out/index.d.ts",
-    "build": "rm -rdf out && mkdir out && npx esbuild src/parser.ts --bundle --minify --platform=node > out/index.js",
+    "build": "cp out/cli.js ./ && rm -rdf out && mkdir out && npx esbuild src/parser.ts --bundle --minify --platform=node > out/index.js && cp cli.js out/",
     "prepare": "npm run build",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest src/test/suite/parser.test.ts"
   },
