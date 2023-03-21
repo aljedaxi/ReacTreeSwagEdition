@@ -1,7 +1,7 @@
 # Filtereact: now with a real unix filter!!!
 ![license](https://img.shields.io/badge/license-MIT-brightgreen)
-![version](https://img.shields.io/badge/npm-v0.0.6-blue)
-![version](https://img.shields.io/badge/build-passing-success)
+![version](https://img.shields.io/badge/npm-v0.1.5-blue)
+![tests passing](https://img.shields.io/badge/build-passing-success)
 
 Filtereact is a fork of a vscode extension that gets rid of the vscode extension part.
 
