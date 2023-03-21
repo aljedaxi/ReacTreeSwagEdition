@@ -2,7 +2,7 @@
   "name": "filtereact",
   "displayName": "FilteReact",
   "description": "React hierarchy tree on the command line",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "icon": "icon.png",
   "preview": false,
   "files": [
