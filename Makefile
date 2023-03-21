@@ -17,5 +17,5 @@ gen-readme:
 	grep -v '^# ' README.tmpl.md >> README.md
 
 test-cli:
-	echo src/test/test_apps/test_8/index.js | out/cli.js | out/cli.js -i
+	echo src/test/test_apps/test_8/index.js | out/cli.js -p prop1 | out/cli.js -i
 	out/cli.js src/test/test_apps/test_8/index.js | out/cli.js -i

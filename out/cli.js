@@ -19,6 +19,13 @@ const options = {
 			default: defaultKeys,
 			description: `component properties to keep. options are\n             ${[...allKeys]}`,
 		},
+		propKeys: {
+			type: 'string',
+			multiple: true,
+			short: 'p',
+			default: [],
+			description: 'which prop keys to keep',
+		},
 		help: {
 			type: 'boolean',
 			short: 'h',
@@ -70,12 +77,17 @@ const recurse = function*(tree) {
 	}
 }
 
+const propKeys = new Set(values.propKeys)
 const parseFile = filePath => {
 	const parser = new Parser(filePath)
 	const tree = parser.parse()
 	// here for reference
 	for (const component of recurse(tree)) {
-		console.log(JSON.stringify(component))
+		const {props, ...rest} = component
+		const componentRepresentation = propKeys.size > 0
+			? {props: pick(propKeys)(props), ...rest}
+			: {props, ...rest}
+		console.log(JSON.stringify(componentRepresentation))
 	}
 }
 
