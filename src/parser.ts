@@ -6,6 +6,28 @@ import { Tree, Props } from './types/Tree';
 import { ImportObj } from './types/ImportObj';
 import { File } from '@babel/types';
 
+const sequentialTypeLabels = (labels: string[], typeds: {type: {label: string}}[]) =>
+	labels.every((l, i) => l === typeds[i].type.label)
+
+const parseTemplateForm = tokens => {
+	const stringToBe = []
+	for (const token of tokens) {
+		if (token.type.label === '}') break
+		if (token.type.label === 'template') stringToBe.push(token.value)
+		if (token.type.label === 'name') stringToBe.push(`\${${token.value}}`)
+	}
+	return stringToBe.join('')
+}
+const generatePropValueRepresentation = tokens => {
+	const isCurlyForm = sequentialTypeLabels(['{', 'string', '}'], tokens)
+	const isTemplateForm = sequentialTypeLabels(['{', '`'], tokens)
+	const isUncurliedStringForm = sequentialTypeLabels(['string'], tokens)
+	return isCurlyForm        ? tokens[1].value
+		: isTemplateForm        ? parseTemplateForm(tokens)
+		: isUncurliedStringForm ? tokens[0].value
+		:                         true
+}
+
 export class Parser {
   entryFile: string;
   tree: Tree | undefined;
@@ -370,8 +392,6 @@ export class Parser {
     astTokens: { [key: string]: any }[],
     j: number
   ): Props {
-		const sequentialTypeLabels = (labels: string[], typeds: {type: {label: string}}[]) =>
-			labels.every((l, i) => l === typeds[i].type.label)
     const props: Props = {};
     while (astTokens[j].type.label !== 'jsxTagEnd') {
 			const [mPropName, mEquals, mOpCurly, mValue, mCloseCurly] = astTokens.slice(j, j + 5)
@@ -379,21 +399,7 @@ export class Parser {
         mPropName.type.label === 'jsxName' &&
         mEquals.value === '='
       ) {
-				const isCurlyForm = sequentialTypeLabels(
-					['{', 'string', '}'], astTokens.slice(j + 2, j + 5)
-				)
-				const isTemplateForm = sequentialTypeLabels(
-					['{', '`', 'template', '`', '}'], astTokens.slice(j + 2, j + 7)
-				)
-				const isUncurliedStringForm = sequentialTypeLabels(
-					['string'], astTokens.slice(j + 2, j + 3)
-				)
-				const v = isCurlyForm                ? astTokens[j + 3].value
-					: isTemplateForm                   ? astTokens[j + 4].value
-					: mOpCurly.type.label === 'string' ? astTokens[j + 2].value
-					:                                    true
-				const k = mPropName.value
-        props[k] = v;
+        props[mPropName.value] = generatePropValueRepresentation(astTokens.slice(j + 2));
       }
       j += 1;
     }

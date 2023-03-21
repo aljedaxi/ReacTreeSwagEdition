@@ -220,7 +220,7 @@ describe('Parser Test Suite', () => {
 		test('Grandchild should have the correct three props', () => {
 			jestExpect(tree.children[0].children[0].props.prop1).toBe('This is a prop');
 			jestExpect(tree.children[0].children[0].props.prop2).toBe('This is another prop');
-			jestExpect(tree.children[0].children[0].props.prop3).toBe('One more prop');
+			jestExpect(tree.children[0].children[0].props.prop3).toBe('One more ${prop}');
 		});
 	});
 

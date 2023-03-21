@@ -3,11 +3,12 @@ import Main from './Main';
 
 
 
+const prop = 'prop'
 class App extends Component {
   render () {
     return (
       <div>
-        <Main prop1='This is a prop' prop2={'This is another prop'} prop3={`One more prop`}/>
+        <Main prop1='This is a prop' prop2={'This is another prop'} prop3={`One more ${prop}`}/>
       </div>
     )
   }
