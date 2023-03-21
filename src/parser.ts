@@ -11,10 +11,20 @@ const sequentialTypeLabels = (labels: string[], typeds: {type: {label: string}}[
 
 const parseTemplateForm = tokens => {
 	const stringToBe = []
-	for (const token of tokens) {
-		if (token.type.label === '}') break
-		if (token.type.label === 'template') stringToBe.push(token.value)
-		if (token.type.label === 'name') stringToBe.push(`\${${token.value}}`)
+	for (let i = 0; true; i++) {
+		const {type: {label}, value} = tokens[i]
+		const {type: {label: nextLabel}} = tokens[i + 1]
+		const {type: {label: lastLabel}} = tokens[i - 1] ?? {type: {}}
+		if (label === '`' && nextLabel === '}') break
+		if (label === 'template') stringToBe.push(value)
+		if (label === '.') stringToBe.push('.')
+		if (label === '${') stringToBe.push('${')
+		if (label === '}') stringToBe.push('}')
+		if (label === 'name') {
+			if (nextLabel === '=>') continue
+			if (lastLabel === '=>') continue
+			stringToBe.push(value)
+		}
 	}
 	return stringToBe.join('')
 }
