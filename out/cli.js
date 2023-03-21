@@ -30,6 +30,13 @@ const options = {
 			description: 'turn json into jsx',
 			default: false,
 		},
+		commentKeys: {
+			type: 'string',
+			multiple: true,
+			short: 'c',
+			default: [],
+			description: 'print key values pairs as comments above component. same options as --keys',
+		}
 	}
 }
 
@@ -80,6 +87,7 @@ const jsxVal = v =>
 const inverseMain = jsonString => {
 	const json = JSON.parse(jsonString)
 	const {id, name, props, ...rest} = json
+	values.commentKeys.forEach(k => console.log(`\/\/ {"${k}": ${JSON.stringify(json[k])}}`))
 	console.log(
 		`<${name} ${
 			Object.entries(props)
