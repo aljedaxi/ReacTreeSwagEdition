@@ -19,3 +19,11 @@ gen-readme:
 test-cli:
 	echo src/test/test_apps/test_8/index.js | out/cli.js -p prop1 | out/cli.js -i
 	out/cli.js src/test/test_apps/test_8/index.js | out/cli.js -i
+
+SEVERITY ?= patch
+version:
+	npm version ${SEVERITY}
+
+publish: version gen-readme
+	git add README.md && git commit --amend && git push
+	npm publish
