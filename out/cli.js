@@ -5,8 +5,8 @@ const {stdin, stdout} = require('node:process')
 const {Parser} = require('./index.js')
 const {parseArgs} = require('node:util')
 
-const keysYouCantLiveWithout = ['name', 'id']
-const defaultKeys = ['filePath', 'importPath', 'props', 'parentList']
+const keysYouCantLiveWithout = ['name']
+const defaultKeys = ['id', 'filePath', 'importPath', 'props', 'parentList', 'parentId']
 const allKeys = new Set(['fileName', 'expanded', 'depth', 'thirdParty', 'reactRouter', 'reduxConnect', 'count', 'children', 'id', 'name', 'filePath', 'importPath', 'props', 'parentList'])
 const options = {
 	strict: true,
@@ -71,7 +71,7 @@ const pick = keys => o => Object.fromEntries(
 )
 
 const recurse = function*(tree) {
-	yield pick(new Set([...keysToKeep, 'parentId']))(tree)
+	yield pick(new Set([...keysToKeep]))(tree)
 	for (const child of tree.children) {
 		yield* recurse({...child, parentId: tree.id})
 	}
